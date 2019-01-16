@@ -63,13 +63,20 @@
             }
             #bao {
                 text-align: center;
-                color: red;
+                color: yellowgreen;
             }
         </style>
     </head>
     <body>
-            <div id="bao">   
-                 Bão
+            <div>   
+                {{-- @foreach ($user as $item)
+                    <div id="bao">{{$item}}</div>
+                @endforeach --}}
+                @if ($user != 2)
+                    <p>Im mẹ đi mày</p>
+                @else
+                    <p>Hay lắm cu</p>    
+                @endif
             </div>
     </body>        
 </html>
