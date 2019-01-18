@@ -42,3 +42,44 @@ Route::group(['prefix' => 'admin'], function(){
 Route::get('/controller','MyController@getController');
 Route::get('/tinhtong/{number1}/{number2}','MyController@tinhtongController');
 Route::get('/view','MyController@viewController');
+
+Route::get('/master',function(){
+    return view('master');
+});
+Route::get('/layout',function(){
+    return view('layout');
+});
+Route::get('/sub',function(){
+    return view('sub');
+});
+Route::get('url/full',function(){
+    return URL::full();
+});
+Route::get('url/to',function(){
+    return URL::to('/tinhtong', ['Bão','Bụi'],true);
+});
+
+
+//Database
+Route::get('schema/create', function(){
+    Schema::create('learnphp', function($table){
+        $table->increments('id');
+        $table->string('tenmonhoc');
+        $table->integer('gia');
+        $table->text('ghichi')->nullable();
+        $table->timestamps();
+    });
+});
+Route::get('schema/create/product', function(){
+    Schema::create('product', function($table){
+        $table->increments('id');
+        $table->string('name');
+        $table->integer('price');
+        $table->integer('cate_id')->unsigned();
+        $table->foreign('cate_id')->references('id')->on('category');
+        $table->timestamps();
+    });
+});
+Route::get('schema/rename',function(){
+    Schema::rename('learnphp','nhanvien');
+});
