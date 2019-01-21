@@ -83,3 +83,86 @@ Route::get('schema/create/product', function(){
 Route::get('schema/rename',function(){
     Schema::rename('learnphp','nhanvien');
 });
+
+//Query Builder
+
+Route::get('query/all', function(){
+    $data = DB::table('product')->get();
+    echo "<pre>";
+    print_r($data);
+    echo "<pre>";
+    //trả về giá trị là object
+});
+Route::get('query/select', function(){
+    $data = DB::table('product')->select('name')->where('id',4)->get();
+    echo "<pre>";
+    print_r($data);
+    echo "<pre>";
+    //trả về giá trị là object với thuộc tính mong muốn
+});
+Route::get('query/compare', function(){
+    $data = DB::table('product')->where('id',2)->orWhere('price',13)->get();
+    echo "<pre>";
+    print_r($data);
+    echo "<pre>";
+    //trả về giá trị là object
+});
+Route::get('query/orderby', function(){
+    $data = DB::table('product')->orderBy('id','DESC')->get();
+    echo "<pre>";
+    print_r($data);
+    echo "<pre>";
+    //trả về giá trị là object
+});
+
+//Eloquent ORM
+Route::get('model/select-all', function(){
+    $data = App\Product::all()->tojSon();
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+});
+Route::get('model/select-id', function(){
+    $data = App\Product::findOrFail(7)->tojSon();
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+});
+Route::get('model/where', function(){
+    $data = App\Product::where('price', 23)->get();
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    //where luôn luôn đi với get nếu không sẽ bị load dữ liệu lâu
+});
+Route::get('model/where1', function(){
+    $data = App\Product::where('price', 23)->take(2)->get();
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    //where luôn luôn đi với get nếu không sẽ bị load dữ liệu lâu
+});
+//lấy 1 cột dữ liệu đặt select trước ->get()
+Route::get('relation/one-many', function(){
+    $data = App\Product::find(2)->images()->get()->toArray();
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    //where luôn luôn đi với get nếu không sẽ bị load dữ liệu lâu
+});
+Route::get('relation/one-many2', function(){
+    $data = App\Images::find(1)->product()->get()->toArray();
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    //where luôn luôn đi với get nếu không sẽ bị load dữ liệu lâu
+});
+
+Route::get('auth/login', ['uses'=>'ThanhVienController@getLogin'])->name('getLogin');
+Route::post('auth/login',['uses'=>'ThanhVienController@postLogin'])->name('postLogin');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('authen/getRegister',['uses'=>'Auth\RegisterController@getRegister'])->name('getRegister');
+Route::post('authen/postRegister',['uses'=>'Auth\RegisterController@postRegister'])->name('postRegister');
